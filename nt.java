@@ -105,7 +105,6 @@ public class nt
 
     //check for Straight Flush
     //value - 9
-    //fix -update: need in tests
     public static String checkForStraightFlush(Card[] plCards)
     {
         String ch = plCards[0].color;
@@ -384,7 +383,6 @@ public class nt
 
     //check for two-pair
     //value - 3
-    //fix - update: need in tests - looks like final
     public static ArrayList<Integer> checkForTwoPair(Card[] plCards)
     {
         ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -436,7 +434,6 @@ public class nt
 
     //check for one-pair
     //value - 2
-    //fix - update: need in tests
     public static ArrayList<Integer> checkForOnePair(Card[] plCards)
     {
         ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -935,19 +932,92 @@ public class nt
                     ArrayList<Integer> fir = checkForTwoPair(plFir);
                     ArrayList<Integer> sec = checkForTwoPair(plSec);
 
+                    int fPair = -1, sPair = -1;
+                    int ffPair = -1, ssPair = -1;
+                    int f = -1, s = -1;
+
+                    //first
+                    for(int i = 0; i < fir.size() - 1; ++i)
+                    {
+                        if(fir.get(i) == fir.get(i+1))
+                        {
+                            fPair = fir.get(i);
+                        }
+                    }
+
+                    for(int i = 0; i < fir.size() - 1; ++i)
+                    {
+                        if(fir.get(i) == fir.get(i+1) && fir.get(i) != fPair)
+                        {
+                            ffPair = fir.get(i);
+                        }
+                    }
+
                     for(int i = 0; i < fir.size(); ++i)
                     {
-                        if(fir.get(i) != sec.get(i))
+                        if(fir.get(i) != fPair && fir.get(i) != ffPair)
                         {
-                            if(fir.get(i) > sec.get(i)) return 1;
-                            else return 2;
+                            f = fir.get(i);
+                        }
+                    }
+                    //first
+
+                    //second
+                    for(int i = 0; i < sec.size() - 1; ++i)
+                    {
+                        if(sec.get(i) == sec.get(i+1))
+                        {
+                            sPair = sec.get(i);
+                        }
+                    }
+
+                    for(int i = 0; i < sec.size() - 1; ++i)
+                    {
+                        if(sec.get(i) == sec.get(i+1) && sec.get(i) != sPair)
+                        {
+                            ssPair = sec.get(i);
+                        }
+                    }
+
+                    for(int i = 0; i < sec.size(); ++i)
+                    {
+                        if(sec.get(i) != sPair && sec.get(i) != ssPair)
+                        {
+                            s = sec.get(i);
+                        }
+                    }
+                    //second
+
+                    if(fPair < ffPair)
+                    {
+                        int tmp = fPair;
+                        fPair = ffPair;
+                        fPair = tmp;
+                    }
+
+                    if(sPair < ssPair)
+                    {
+                        int tmp = sPair;
+                        sPair = ssPair;
+                        ssPair = tmp;
+                    }
+
+                    if(fPair > sPair) return 1;
+                    else if(fPair < sPair) return 2;
+                    else
+                    {
+                        if(ffPair > ssPair) return 1;
+                        else if(ffPair < ssPair) return 2;
+                        else
+                        {
+                            if(f > s) return 1;
+                            else if(f < s) return 2;
                         }
                     }
 
                     return 0;
                 }
                 
-
                 case 2:
                 {
                     ArrayList<Integer> fir = checkForOnePair(plFir);
@@ -1017,7 +1087,6 @@ public class nt
                     return 0;
                 }
                             
-
                 case 1:
                 {
                     ArrayList<Integer> fir = checkForHighCard(plFir);
